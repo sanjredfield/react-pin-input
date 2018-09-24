@@ -11,6 +11,8 @@ class PinInput extends Component {
     this.setValues = this.setValues.bind(this);
 
     this.values = new Array(props.length).join('0').split('0');
+
+    console.log(`PinInput constructor: ${this.props.value}`);
     if (this.props.value) {
       this.setValues(this.props.value)
     }
@@ -32,8 +34,6 @@ class PinInput extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('received new props: ');
-    console.log(this.props.value !== newProps.value)
     if (this.props.value !== newProps.value) {
       this.setValues(newProps.value);
     }
