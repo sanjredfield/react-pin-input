@@ -24,7 +24,7 @@ class PinItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      value: props.value || '',
       focus: false,
     };
     this.onChange = this.onChange.bind(this);

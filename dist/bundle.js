@@ -741,11 +741,9 @@ var PinInput = function (_Component) {
 
     _this.values = new Array(props.length).join('0').split('0');
 
-    console.log('PinInput constructor: ' + _this.props.value);
     if (_this.props.value) {
       _this.setValues(_this.props.value);
     }
-    console.log(_this.values);
 
     _this.elements = [];
     _this.currentIndex = 0;
@@ -765,13 +763,6 @@ var PinInput = function (_Component) {
     value: function componentDidMount() {
       // Setting focus on the first element
       if (this.props.focus && this.props.length) this.elements[0].focus();
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(newProps) {
-      if (this.props.value !== newProps.value) {
-        this.setValues(newProps.value);
-      }
     }
   }, {
     key: 'clear',
@@ -851,7 +842,8 @@ var PinInput = function (_Component) {
             inputMode: _this2.props.inputMode,
             validate: _this2.props.validate,
             inputStyle: _this2.props.inputStyle,
-            inputFocusStyle: _this2.props.inputFocusStyle
+            inputFocusStyle: _this2.props.inputFocusStyle,
+            value: e
           });
         })
       );
@@ -947,7 +939,7 @@ var PinItem = function (_Component) {
     var _this = _possibleConstructorReturn(this, (PinItem.__proto__ || Object.getPrototypeOf(PinItem)).call(this, props));
 
     _this.state = {
-      value: '',
+      value: props.value || '',
       focus: false
     };
     _this.onChange = _this.onChange.bind(_this);

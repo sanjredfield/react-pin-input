@@ -12,11 +12,9 @@ class PinInput extends Component {
 
     this.values = new Array(props.length).join('0').split('0');
 
-    console.log(`PinInput constructor: ${this.props.value}`);
     if (this.props.value) {
       this.setValues(this.props.value)
     }
-    console.log(this.values);
 
     this.elements = [];
     this.currentIndex = 0;
@@ -32,12 +30,6 @@ class PinInput extends Component {
   componentDidMount() {
     // Setting focus on the first element
     if(this.props.focus && this.props.length) this.elements[0].focus();
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (this.props.value !== newProps.value) {
-      this.setValues(newProps.value);
-    }
   }
 
   clear() {
@@ -99,6 +91,7 @@ class PinInput extends Component {
             validate={ this.props.validate }
             inputStyle={ this.props.inputStyle }
             inputFocusStyle={ this.props.inputFocusStyle }
+            value={e}
           />)
         }
       </div>
