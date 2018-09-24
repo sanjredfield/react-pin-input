@@ -8,18 +8,33 @@ class PinInput extends Component {
 
   constructor(props) {
     super(props);
-    // this.props.secret = this.props.secret || false;
-    // TODO: better way to create array
-    this.values = new Array(props.length)
-      .join('0')
-      .split('0');
+    this.setValues = this.setValues.bind(this);
+
+    this.values = new Array(props.length).join('0').split('0');
+    if (this.props.value) {
+      this.setValues(this.props.value)
+    }
+
     this.elements = [];
     this.currentIndex = 0;
+  }
+
+  setValues(value) {
+    for (var i = 0; i < value.length; i++) {
+      if (i >= this.props.length) break;
+      this.values[i] = value[i];
+    }
   }
 
   componentDidMount() {
     // Setting focus on the first element
     if(this.props.focus && this.props.length) this.elements[0].focus();
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.props.value !== newProps.value) {
+      this.setValues(newProps.value);
+    }
   }
 
   clear() {
