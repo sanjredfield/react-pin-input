@@ -745,6 +745,7 @@ var PinInput = function (_Component) {
     if (_this.props.value) {
       _this.setValues(_this.props.value);
     }
+    console.log(_this.values);
 
     _this.elements = [];
     _this.currentIndex = 0;

@@ -16,6 +16,7 @@ class PinInput extends Component {
     if (this.props.value) {
       this.setValues(this.props.value)
     }
+    console.log(this.values);
 
     this.elements = [];
     this.currentIndex = 0;
