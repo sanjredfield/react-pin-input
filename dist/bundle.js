@@ -744,7 +744,6 @@ var PinInput = function (_Component) {
       _this.setValues(_this.props.value);
     }
 
-    console.log('PinInput constructor');
     _this.elements = [];
     _this.currentIndex = 0;
     return _this;
@@ -753,7 +752,6 @@ var PinInput = function (_Component) {
   _createClass(PinInput, [{
     key: 'setValues',
     value: function setValues(value) {
-      console.log('setting new values: ' + value);
       for (var i = 0; i < value.length; i++) {
         if (i >= this.props.length) break;
         this.values[i] = value[i];

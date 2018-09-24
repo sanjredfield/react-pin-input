@@ -15,13 +15,11 @@ class PinInput extends Component {
       this.setValues(this.props.value)
     }
 
-    console.log(`PinInput constructor`);
     this.elements = [];
     this.currentIndex = 0;
   }
 
   setValues(value) {
-    console.log(`setting new values: ${value}`);
     for (var i = 0; i < value.length; i++) {
       if (i >= this.props.length) break;
       this.values[i] = value[i];
