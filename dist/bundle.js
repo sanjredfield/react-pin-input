@@ -831,6 +831,7 @@ var PinInput = function (_Component) {
     value: function render() {
       var _this2 = this;
 
+      console.log('PinInput::render');
       return _react2.default.createElement(
         'div',
         { style: this.props.style, className: 'pincode-input-container' },

@@ -84,6 +84,7 @@ class PinInput extends Component {
   }
 
   render() {
+    console.log('PinInput::render');
     return (
       <div style={this.props.style}  className='pincode-input-container'>
         {this
