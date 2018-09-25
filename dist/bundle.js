@@ -766,9 +766,8 @@ var PinInput = function (_Component) {
       if (this.props.focus && this.props.length) this.elements[0].focus();
     }
   }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      console.log('componentWillReceiveProps: ' + nextProps.value);
+    key: 'UNSAFE_componentWillReceiveProps',
+    value: function UNSAFE_componentWillReceiveProps(nextProps) {
       if (this.props.value !== nextProps.value) {
         this.setValues(nextProps.value);
       }

@@ -33,8 +33,7 @@ class PinInput extends Component {
     if(this.props.focus && this.props.length) this.elements[0].focus();
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps: ' + nextProps.value);
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.value !== nextProps.value) {
       this.setValues(nextProps.value);
     }
