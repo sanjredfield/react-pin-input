@@ -765,6 +765,13 @@ var PinInput = function (_Component) {
       if (this.props.focus && this.props.length) this.elements[0].focus();
     }
   }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (this.props.value !== nextProps.value) {
+        this.setValues(nextProps.value);
+      }
+    }
+  }, {
     key: 'clear',
     value: function clear() {
       this.elements.forEach(function (e) {
