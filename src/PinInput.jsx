@@ -34,6 +34,7 @@ class PinInput extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log('UNSAFE_componentWillReceiveProps called');
     if (this.props.value !== nextProps.value) {
       this.setValues(nextProps.value);
     }

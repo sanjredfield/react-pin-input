@@ -768,6 +768,7 @@ var PinInput = function (_Component) {
   }, {
     key: 'UNSAFE_componentWillReceiveProps',
     value: function UNSAFE_componentWillReceiveProps(nextProps) {
+      console.log('UNSAFE_componentWillReceiveProps called');
       if (this.props.value !== nextProps.value) {
         this.setValues(nextProps.value);
       }
