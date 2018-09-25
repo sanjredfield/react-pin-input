@@ -21,7 +21,6 @@ class PinInput extends Component {
   }
 
   setValues(value) {
-    console.log('setting values');
     for (var i = 0; i < value.length; i++) {
       if (i >= this.props.length) break;
       this.values[i] = value[i];
@@ -34,7 +33,6 @@ class PinInput extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps: ' + nextProps.value);
     if (this.props.value !== nextProps.value) {
       this.setValues(nextProps.value);
     }
@@ -61,16 +59,11 @@ class PinInput extends Component {
     // Set focus on next
     if (value.length === 1 && index < length - 1) {
       currentIndex += 1;
-      this
-        .elements[currentIndex]
-        .focus();
+      this.elements[currentIndex].focus();
     }
 
     // Notify the parent
-    const pin = this
-      .values
-      .join('');
-
+    const pin = this.values.join('');
     onChange(pin, currentIndex);
     if (pin.length === length) {
       onComplete(pin, currentIndex);
@@ -84,7 +77,6 @@ class PinInput extends Component {
   }
 
   render() {
-    console.log('PinInput::render');
     return (
       <div style={this.props.style}  className='pincode-input-container'>
         {this
@@ -101,6 +93,7 @@ class PinInput extends Component {
             inputStyle={ this.props.inputStyle }
             inputFocusStyle={ this.props.inputFocusStyle }
             value={e}
+            onContinueClick={this.props.onContinueClick}
           />)
         }
       </div>

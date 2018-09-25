@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 const styles = {
@@ -42,6 +43,13 @@ class PinItem extends Component {
   onKeyDown(e) {
     if (e.keyCode === 8 && (!this.state.value || !this.state.value.length)) {
       this.props.onBackspace();
+    }
+
+    if (e.keyCode == 13 || e.keyCode == 9) {
+      event.preventDefault();
+      var inputEl = ReactDOM.findDOMNode(this.input);
+      inputEl.blur();
+      if (this.props.onContinueClick) this.props.onContinueClick();
     }
   }
 
