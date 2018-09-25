@@ -752,6 +752,7 @@ var PinInput = function (_Component) {
   _createClass(PinInput, [{
     key: 'getValues',
     value: function getValues(value) {
+      console.log('getValues: ' + value);
       if (!value) return new Array(this.props.length).join('0').split('0');
 
       var values = new Array(this.props.length);
@@ -770,6 +771,8 @@ var PinInput = function (_Component) {
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps) {
+      console.log('componentDidUpdate: ' + prevProps.value);
+      console.log(this.props.value);
       if (this.props.value !== prevProps.value) {
         this.setState({
           values: this.getValues(this.props.value)
