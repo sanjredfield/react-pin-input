@@ -32,6 +32,12 @@ class PinInput extends Component {
     if(this.props.focus && this.props.length) this.elements[0].focus();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.value !== nextProps.value) {
+      this.setValues(nextProps.value);
+    }
+  }
+
   clear() {
     this.elements.forEach(e => e.clear());
     this.values = this.values.map(() => undefined)
