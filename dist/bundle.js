@@ -768,6 +768,7 @@ var PinInput = function (_Component) {
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
+      console.log('componentWillReceiveProps: ' + nextProps.value);
       if (this.props.value !== nextProps.value) {
         this.setValues(nextProps.value);
       }

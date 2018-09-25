@@ -34,6 +34,7 @@ class PinInput extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps: ' + nextProps.value);
     if (this.props.value !== nextProps.value) {
       this.setValues(nextProps.value);
     }
