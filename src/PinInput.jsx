@@ -8,27 +8,24 @@ class PinInput extends Component {
 
   constructor(props) {
     super(props);
-    this.getValues = this.getValues.bind(this);
+    this.setValues = this.setValues.bind(this);
 
-    var values = this.getValues();
-    this.state = {
-      values: this.getValues(this.props.value),
-      currentIndex: 0,
+    this.values = new Array(props.length).join('0').split('0');
+
+    if (this.props.value) {
+      this.setValues(this.props.value)
     }
 
     this.elements = [];
+    this.currentIndex = 0;
   }
 
-  getValues(value) {
-    console.log('getValues: ' + value);
-    if (!value) return new Array(this.props.length).join('0').split('0');
-
-    var values = new Array(this.props.length);
+  setValues(value) {
+    console.log('setting values');
     for (var i = 0; i < value.length; i++) {
       if (i >= this.props.length) break;
-      values[i] = value[i];
+      this.values[i] = value[i];
     }
-    return values;
   }
 
   componentDidMount() {
@@ -36,21 +33,17 @@ class PinInput extends Component {
     if(this.props.focus && this.props.length) this.elements[0].focus();
   }
 
-  componentDidUpdate(prevProps) {
-    console.log('componentDidUpdate: ' + prevProps.value);
-    console.log(this.props.value);
-    if (this.props.value !== prevProps.value) {
-      this.setState({
-        values: this.getValues(this.props.value)
-      })
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps: ' + nextProps.value);
+    if (this.props.value !== nextProps.value) {
+      this.setValues(nextProps.value);
     }
   }
 
   clear() {
     this.elements.forEach(e => e.clear());
+    this.values = this.values.map(() => undefined)
     this.elements[0].focus();
-    var values = this.state.values.map(() => undefined);
-    this.setState({ values });
   }
 
   focus() {
@@ -63,22 +56,25 @@ class PinInput extends Component {
     const { length, onComplete, onChange } = this.props;
     let currentIndex = index;
 
-    var values = this.state.values.slice();
-    values[index] = value;
-    this.setState({ values }, () => {
-      if (value.length === 1 && index < length - 1) {
-        currentIndex += 1;
-        this
-          .elements[currentIndex]
-          .focus();
-      }
+    this.values[index] = value;
 
-      const pin = this.state.values.join('');
-      onChange(pin, currentIndex);
-      if (pin.length === length) {
-        onComplete(pin, currentIndex);
-      }
-    });
+    // Set focus on next
+    if (value.length === 1 && index < length - 1) {
+      currentIndex += 1;
+      this
+        .elements[currentIndex]
+        .focus();
+    }
+
+    // Notify the parent
+    const pin = this
+      .values
+      .join('');
+
+    onChange(pin, currentIndex);
+    if (pin.length === length) {
+      onComplete(pin, currentIndex);
+    }
   }
 
   onBackspace(index) {
@@ -90,7 +86,9 @@ class PinInput extends Component {
   render() {
     return (
       <div style={this.props.style}  className='pincode-input-container'>
-        {this.state.values.map((e, i) => <PinItem
+        {this
+          .values
+          .map((e, i) => <PinItem
             ref={ n => (this.elements[i] = n) }
             key={ i }
             onBackspace={ () => this.onBackspace(i) }
