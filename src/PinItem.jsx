@@ -33,6 +33,12 @@ class PinItem extends Component {
     this.onBlur = this.onBlur.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      this.setState({ value: nextProps.value });
+    }
+  }
+
   onKeyDown(e) {
     if (e.keyCode === 8 && (!this.state.value || !this.state.value.length)) {
       this.props.onBackspace();

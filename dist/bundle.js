@@ -960,6 +960,13 @@ var PinItem = function (_Component) {
   }
 
   _createClass(PinItem, [{
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.value !== this.props.value) {
+        this.setState({ value: nextProps.value });
+      }
+    }
+  }, {
     key: 'onKeyDown',
     value: function onKeyDown(e) {
       if (e.keyCode === 8 && (!this.state.value || !this.state.value.length)) {
