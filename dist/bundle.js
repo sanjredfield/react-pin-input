@@ -737,27 +737,29 @@ var PinInput = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (PinInput.__proto__ || Object.getPrototypeOf(PinInput)).call(this, props));
 
-    _this.setValues = _this.setValues.bind(_this);
+    _this.getValues = _this.getValues.bind(_this);
 
-    _this.values = new Array(props.length).join('0').split('0');
-
-    if (_this.props.value) {
-      _this.setValues(_this.props.value);
-    }
+    var values = _this.getValues();
+    _this.state = {
+      values: _this.getValues(_this.props.value),
+      currentIndex: 0
+    };
 
     _this.elements = [];
-    _this.currentIndex = 0;
     return _this;
   }
 
   _createClass(PinInput, [{
-    key: 'setValues',
-    value: function setValues(value) {
-      console.log('setting values');
+    key: 'getValues',
+    value: function getValues(value) {
+      if (!value) return new Array(this.props.length).join('0').split('0');
+
+      var values = new Array(this.props.length);
       for (var i = 0; i < value.length; i++) {
         if (i >= this.props.length) break;
-        this.values[i] = value[i];
+        values[i] = value[i];
       }
+      return values;
     }
   }, {
     key: 'componentDidMount',
@@ -766,11 +768,12 @@ var PinInput = function (_Component) {
       if (this.props.focus && this.props.length) this.elements[0].focus();
     }
   }, {
-    key: 'UNSAFE_componentWillReceiveProps',
-    value: function UNSAFE_componentWillReceiveProps(nextProps) {
-      console.log('UNSAFE_componentWillReceiveProps called');
-      if (this.props.value !== nextProps.value) {
-        this.setValues(nextProps.value);
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps) {
+      if (this.props.value !== prevProps.value) {
+        this.setState({
+          values: this.getValues(this.props.value)
+        });
       }
     }
   }, {
@@ -779,10 +782,11 @@ var PinInput = function (_Component) {
       this.elements.forEach(function (e) {
         return e.clear();
       });
-      this.values = this.values.map(function () {
+      this.elements[0].focus();
+      var values = this.state.values.map(function () {
         return undefined;
       });
-      this.elements[0].focus();
+      this.setState({ values: values });
     }
   }, {
     key: 'focus',
@@ -796,6 +800,8 @@ var PinInput = function (_Component) {
   }, {
     key: 'onItemChange',
     value: function onItemChange(value, index) {
+      var _this2 = this;
+
       var _props = this.props,
           length = _props.length,
           onComplete = _props.onComplete,
@@ -803,21 +809,20 @@ var PinInput = function (_Component) {
 
       var currentIndex = index;
 
-      this.values[index] = value;
+      var values = this.state.values.slice();
+      values[index] = value;
+      this.setState({ values: values }, function () {
+        if (value.length === 1 && index < length - 1) {
+          currentIndex += 1;
+          _this2.elements[currentIndex].focus();
+        }
 
-      // Set focus on next
-      if (value.length === 1 && index < length - 1) {
-        currentIndex += 1;
-        this.elements[currentIndex].focus();
-      }
-
-      // Notify the parent
-      var pin = this.values.join('');
-
-      onChange(pin, currentIndex);
-      if (pin.length === length) {
-        onComplete(pin, currentIndex);
-      }
+        var pin = _this2.state.values.join('');
+        onChange(pin, currentIndex);
+        if (pin.length === length) {
+          onComplete(pin, currentIndex);
+        }
+      });
     }
   }, {
     key: 'onBackspace',
@@ -829,29 +834,29 @@ var PinInput = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _react2.default.createElement(
         'div',
         { style: this.props.style, className: 'pincode-input-container' },
-        this.values.map(function (e, i) {
+        this.state.values.map(function (e, i) {
           return _react2.default.createElement(_PinItem2.default, {
             ref: function ref(n) {
-              return _this2.elements[i] = n;
+              return _this3.elements[i] = n;
             },
             key: i,
             onBackspace: function onBackspace() {
-              return _this2.onBackspace(i);
+              return _this3.onBackspace(i);
             },
-            secret: _this2.props.secret || false,
+            secret: _this3.props.secret || false,
             onChange: function onChange(v) {
-              return _this2.onItemChange(v, i);
+              return _this3.onItemChange(v, i);
             },
-            type: _this2.props.type,
-            inputMode: _this2.props.inputMode,
-            validate: _this2.props.validate,
-            inputStyle: _this2.props.inputStyle,
-            inputFocusStyle: _this2.props.inputFocusStyle,
+            type: _this3.props.type,
+            inputMode: _this3.props.inputMode,
+            validate: _this3.props.validate,
+            inputStyle: _this3.props.inputStyle,
+            inputFocusStyle: _this3.props.inputFocusStyle,
             value: e
           });
         })
