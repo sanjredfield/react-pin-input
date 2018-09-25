@@ -21,6 +21,7 @@ class PinInput extends Component {
   }
 
   setValues(value) {
+    console.log('setting values');
     for (var i = 0; i < value.length; i++) {
       if (i >= this.props.length) break;
       this.values[i] = value[i];
