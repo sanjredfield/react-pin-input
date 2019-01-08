@@ -84,6 +84,7 @@ class PinInput extends Component {
           .map((e, i) => <PinItem
             ref={ n => (this.elements[i] = n) }
             key={ i }
+            id={ i }
             onBackspace={ () => this.onBackspace(i) }
             secret={ this.props.secret || false }
             onChange={ v => this.onItemChange(v, i) }

@@ -1143,6 +1143,7 @@ var PinInput = function (_Component) {
               return _this2.elements[i] = n;
             },
             key: i,
+            id: i,
             onBackspace: function onBackspace() {
               return _this2.onBackspace(i);
             },
@@ -1297,17 +1298,10 @@ var PinItem = function (_Component) {
   }, {
     key: 'onChange',
     value: function onChange(e) {
-      var _this2 = this;
-
       var value = this.validate(e.target.value);
       if (this.state.value === value) return;
       if (value.length < 2) {
-        this.setState({ value: value });
-        // timeout is to make sure that clearing happens after value is set
-        // this is done beacause the setState callback was not triggering in react@15.2.4
-        setTimeout(function () {
-          _this2.props.onChange(value);
-        }, 0);
+        this.props.onChange(value);
       }
     }
   }, {
@@ -1318,7 +1312,6 @@ var PinItem = function (_Component) {
   }, {
     key: 'onFocus',
     value: function onFocus(e) {
-      e.target.select();
       this.setState({ focus: true });
     }
   }, {
@@ -1343,7 +1336,7 @@ var PinItem = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       var _state = this.state,
           focus = _state.focus,
@@ -1355,6 +1348,7 @@ var PinItem = function (_Component) {
           inputFocusStyle = _props.inputFocusStyle;
 
       var inputType = this.props.type === 'numeric' ? 'tel' : this.props.type || 'text';
+
       return _react2.default.createElement('input', {
         className: 'pincode-input-text',
         onChange: this.onChange,
@@ -1364,7 +1358,7 @@ var PinItem = function (_Component) {
         type: this.props.secret ? 'password' : inputType,
         pattern: this.props.type === 'numeric' ? '[0-9]*' : '[A-Z0-9]*',
         ref: function ref(n) {
-          return _this3.input = n;
+          return _this2.input = n;
         },
         onFocus: this.onFocus,
         onBlur: this.onBlur,

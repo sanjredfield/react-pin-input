@@ -60,17 +60,10 @@ class PinItem extends Component {
   }
 
   onChange(e) {
-    console.log('PinItem::onChange called');
     const value = this.validate(e.target.value);
     if (this.state.value === value) return;
     if (value.length < 2) {
-      this.setState({value});
-      // timeout is to make sure that clearing happens after value is set
-      // this is done beacause the setState callback was not triggering in react@15.2.4
-      setTimeout(() => {
-        console.log('PinItem::onChange calling onChange on PinInput');
-        this.props.onChange(value);
-      }, 0);
+      this.props.onChange(value);
     }
   }
 
@@ -81,13 +74,10 @@ class PinItem extends Component {
   }
 
   onFocus(e) {
-    console.log('PinItem::onFocus called: ' + this.props.key) ;
-    e.target.select();
     this.setState({ focus: true });
   }
 
   onBlur() {
-    console.log('PinItem::onBlur called: ' + this.props.key);
     this.setState({ focus: false });
   }
 
@@ -108,6 +98,7 @@ class PinItem extends Component {
     const { focus, value } = this.state;
     const { type, inputMode, inputStyle, inputFocusStyle } = this.props;
     const inputType = this.props.type === 'numeric' ? 'tel' : (this.props.type || 'text');
+
     return (<input
       className='pincode-input-text'
       onChange={ this.onChange }
