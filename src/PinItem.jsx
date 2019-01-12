@@ -30,8 +30,6 @@ class PinItem extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onBlur = this.onBlur.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,14 +71,6 @@ class PinItem extends Component {
       .focus();
   }
 
-  onFocus(e) {
-    this.setState({ focus: true });
-  }
-
-  onBlur() {
-    this.setState({ focus: false });
-  }
-
   validate(value) {
     if(this.props.validate) {
       return this.props.validate(value);
@@ -95,7 +85,7 @@ class PinItem extends Component {
   }
 
   render() {
-    const { focus, value } = this.state;
+    const { value } = this.state;
     const { type, inputMode, inputStyle, inputFocusStyle } = this.props;
     const inputType = this.props.type === 'numeric' ? 'tel' : (this.props.type || 'text');
 
@@ -108,13 +98,10 @@ class PinItem extends Component {
       type={ this.props.secret ? 'password' : inputType }
       pattern={ this.props.type === 'numeric' ? '[0-9]*' : '[A-Z0-9]*' }
       ref={ n => (this.input = n) }
-      onFocus={ this.onFocus }
-      onBlur={ this.onBlur }
       style={ Object.assign(
         {},
         styles.input,
-        inputStyle,
-        focus ? Object.assign({}, styles.inputFocus, inputFocusStyle) : {},
+        inputStyle
       ) }
       value={ value }
     />);

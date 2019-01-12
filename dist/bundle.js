@@ -1044,7 +1044,6 @@ var PinInput = function (_Component) {
     var _this = _possibleConstructorReturn(this, (PinInput.__proto__ || Object.getPrototypeOf(PinInput)).call(this, props));
 
     _this.setValues = _this.setValues.bind(_this);
-
     _this.values = new Array(props.length).join('0').split('0');
 
     if (_this.props.value) {
@@ -1126,7 +1125,10 @@ var PinInput = function (_Component) {
     key: 'onBackspace',
     value: function onBackspace(index) {
       if (index > 0) {
+        this.values[index - 1] = '';
         this.elements[index - 1].focus();
+        var pin = this.values.join('');
+        this.props.onChange(pin, index);
       }
     }
   }, {
@@ -1262,8 +1264,6 @@ var PinItem = function (_Component) {
     };
     _this.onChange = _this.onChange.bind(_this);
     _this.onKeyDown = _this.onKeyDown.bind(_this);
-    _this.onFocus = _this.onFocus.bind(_this);
-    _this.onBlur = _this.onBlur.bind(_this);
     return _this;
   }
 
@@ -1310,16 +1310,6 @@ var PinItem = function (_Component) {
       this.input.focus();
     }
   }, {
-    key: 'onFocus',
-    value: function onFocus(e) {
-      this.setState({ focus: true });
-    }
-  }, {
-    key: 'onBlur',
-    value: function onBlur() {
-      this.setState({ focus: false });
-    }
-  }, {
     key: 'validate',
     value: function validate(value) {
       if (this.props.validate) {
@@ -1338,9 +1328,7 @@ var PinItem = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var _state = this.state,
-          focus = _state.focus,
-          value = _state.value;
+      var value = this.state.value;
       var _props = this.props,
           type = _props.type,
           inputMode = _props.inputMode,
@@ -1360,9 +1348,7 @@ var PinItem = function (_Component) {
         ref: function ref(n) {
           return _this2.input = n;
         },
-        onFocus: this.onFocus,
-        onBlur: this.onBlur,
-        style: Object.assign({}, styles.input, inputStyle, focus ? Object.assign({}, styles.inputFocus, inputFocusStyle) : {}),
+        style: Object.assign({}, styles.input, inputStyle),
         value: value
       });
     }

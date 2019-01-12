@@ -9,7 +9,6 @@ class PinInput extends Component {
   constructor(props) {
     super(props);
     this.setValues = this.setValues.bind(this);
-
     this.values = new Array(props.length).join('0').split('0');
 
     if (this.props.value) {
@@ -72,7 +71,10 @@ class PinInput extends Component {
 
   onBackspace(index) {
     if (index > 0) {
+      this.values[index - 1] = '';
       this.elements[index - 1].focus();
+      var pin = this.values.join('');
+      this.props.onChange(pin, index);
     }
   }
 
