@@ -1264,6 +1264,8 @@ var PinItem = function (_Component) {
     };
     _this.onChange = _this.onChange.bind(_this);
     _this.onKeyDown = _this.onKeyDown.bind(_this);
+    _this.setInputRef = _this.setInputRef.bind(_this);
+    _this.onTextInput = _this.onTextInput.bind(_this);
     return _this;
   }
 
@@ -1277,16 +1279,36 @@ var PinItem = function (_Component) {
   }, {
     key: 'onKeyDown',
     value: function onKeyDown(e) {
-      if (e.keyCode === 8 && (!this.state.value || !this.state.value.length)) {
+      var keyCode = e.keyCode;
+      if (keyCode == 0 || keyCode == 229) {
+        this.waitEvent = window.setTimeout(this.props.onBackspace, 10);
+        return;
+      }
+
+      if (keyCode === 8 && (!this.state.value || !this.state.value.length)) {
         this.props.onBackspace();
       }
 
-      if (e.keyCode == 13 || e.keyCode == 9) {
+      if (keyCode == 13 || keyCode == 9) {
         event.preventDefault();
         var inputEl = _reactDom2.default.findDOMNode(this.input);
         inputEl.blur();
         if (this.props.onContinueClick) this.props.onContinueClick();
       }
+    }
+  }, {
+    key: 'onTextInput',
+    value: function onTextInput(e) {
+      if (this.waitEvent) {
+        window.clearTimeout(this.waitEvent);
+        this.waitEvent = null;
+      }
+    }
+  }, {
+    key: 'setInputRef',
+    value: function setInputRef(input) {
+      this.input = input;
+      if (input) input.addEventListener("textInput", this.onTextInput);
     }
   }, {
     key: 'clear',
@@ -1326,8 +1348,6 @@ var PinItem = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
       var value = this.state.value;
       var _props = this.props,
           type = _props.type,
@@ -1337,20 +1357,23 @@ var PinItem = function (_Component) {
 
       var inputType = this.props.type === 'numeric' ? 'tel' : this.props.type || 'text';
 
-      return _react2.default.createElement('input', {
-        className: 'pincode-input-text',
-        onChange: this.onChange,
-        onKeyDown: this.onKeyDown,
-        maxLength: '1',
-        autoComplete: 'off',
-        type: this.props.secret ? 'password' : inputType,
-        pattern: this.props.type === 'numeric' ? '[0-9]*' : '[A-Z0-9]*',
-        ref: function ref(n) {
-          return _this2.input = n;
-        },
-        style: Object.assign({}, styles.input, inputStyle),
-        value: value
-      });
+      return _react2.default.createElement(
+        'div',
+        { className: 'pincode-input-item-wrapper' },
+        _react2.default.createElement('input', {
+          className: 'pincode-input-text',
+          onChange: this.onChange,
+          onKeyDown: this.onKeyDown,
+          maxLength: '1',
+          autoComplete: 'off',
+          type: inputType,
+          pattern: this.props.type === 'numeric' ? '[0-9]*' : '[A-Z0-9]*',
+          ref: this.setInputRef,
+          style: Object.assign({}, styles.input, inputStyle),
+          value: value
+        }),
+        this.props.secret && value != '' ? _react2.default.createElement('div', { className: 'pincode-secret-disc' }) : null
+      );
     }
   }]);
 

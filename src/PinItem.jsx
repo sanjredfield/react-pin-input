@@ -30,6 +30,8 @@ class PinItem extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.setInputRef = this.setInputRef.bind(this);
+    this.onTextInput = this.onTextInput.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,16 +41,34 @@ class PinItem extends Component {
   }
 
   onKeyDown(e) {
-    if (e.keyCode === 8 && (!this.state.value || !this.state.value.length)) {
+    var keyCode = e.keyCode;
+    if (keyCode == 0 || keyCode == 229) {
+      this.waitEvent = window.setTimeout(this.props.onBackspace, 10);
+      return;
+    }
+
+    if (keyCode === 8 && (!this.state.value || !this.state.value.length)) {
       this.props.onBackspace();
     }
 
-    if (e.keyCode == 13 || e.keyCode == 9) {
+    if (keyCode == 13 || keyCode == 9) {
       event.preventDefault();
       var inputEl = ReactDOM.findDOMNode(this.input);
       inputEl.blur();
       if (this.props.onContinueClick) this.props.onContinueClick();
     }
+  }
+
+  onTextInput(e) {
+    if (this.waitEvent) {
+      window.clearTimeout(this.waitEvent);
+      this.waitEvent = null;
+    }
+  }
+
+  setInputRef(input) {
+    this.input = input;
+    if (input) input.addEventListener("textInput", this.onTextInput)
   }
 
   clear() {
@@ -89,22 +109,31 @@ class PinItem extends Component {
     const { type, inputMode, inputStyle, inputFocusStyle } = this.props;
     const inputType = this.props.type === 'numeric' ? 'tel' : (this.props.type || 'text');
 
-    return (<input
-      className='pincode-input-text'
-      onChange={ this.onChange }
-      onKeyDown={ this.onKeyDown }
-      maxLength='1'
-      autoComplete='off'
-      type={ this.props.secret ? 'password' : inputType }
-      pattern={ this.props.type === 'numeric' ? '[0-9]*' : '[A-Z0-9]*' }
-      ref={ n => (this.input = n) }
-      style={ Object.assign(
-        {},
-        styles.input,
-        inputStyle
-      ) }
-      value={ value }
-    />);
+    return (
+      <div className="pincode-input-item-wrapper">
+        <input
+          className='pincode-input-text'
+          onChange={ this.onChange }
+          onKeyDown={ this.onKeyDown }
+          maxLength='1'
+          autoComplete='off'
+          type={ inputType }
+          pattern={ this.props.type === 'numeric' ? '[0-9]*' : '[A-Z0-9]*' }
+          ref={ this.setInputRef }
+          style={ Object.assign(
+            {},
+            styles.input,
+            inputStyle
+          ) }
+          value={ value }
+        />
+        {
+          this.props.secret && value != '' ? (
+            <div className="pincode-secret-disc" />
+          ) : null
+        }
+      </div>
+    );
   }
 }
 
